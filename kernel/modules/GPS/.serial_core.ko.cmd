@@ -1,1 +1,0 @@
-cmd_/home/joseph/Workspaces/BBB/modules/GPS/serial_core.ko := /home/joseph/Workspaces/BBB/buildroot-2016.05/output/host/usr/bin/arm-linux-gnueabihf-ld -r  -T ./scripts/module-common.lds --build-id  -o /home/joseph/Workspaces/BBB/modules/GPS/serial_core.ko /home/joseph/Workspaces/BBB/modules/GPS/serial_core.o /home/joseph/Workspaces/BBB/modules/GPS/serial_core.mod.o
