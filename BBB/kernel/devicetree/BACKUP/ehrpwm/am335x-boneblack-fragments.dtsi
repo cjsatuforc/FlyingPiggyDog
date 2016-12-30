@@ -1,0 +1,36 @@
+
+&am33xx_pinmux { 
+	uart1_pins: pinmux_uart1_pins {
+		pinctrl-single,pins = <
+			0x184 0x20 /* P9.24 uart1_txd.uart1_txd MODE0 OUTPUT (TX) */
+			0x180 0x20 /* P9.26 uart1_rxd.uart1_rxd MODE0 INPUT (RX) */
+		>;
+	};
+	
+	ehrpwm0_pins: pinmux_ehrpwm0_pins {
+		pinctrl-single,pins = <
+			0x150 0x03
+		>;
+	 };
+
+};
+
+&epwmss0 {
+	status = "okay";
+	/*clocks = <&ehrpwm0_tbclk>;*/
+
+	ehrpwm0: ehrpwm@48300200 {
+	   	pinctrl-names = "default";
+	   	pinctrl-0 = <&ehrpwm0_pins>;
+		clocks = <&ehrpwm0_tbclk>;
+		/*clocks = <&l4ls_gclk>;*/
+		status = "okay";
+	};
+};
+	
+
+&uart1 {
+   	status = "okay";
+   	pinctrl-names = "default";
+   	pinctrl-0 = <&uart1_pins>;
+};
