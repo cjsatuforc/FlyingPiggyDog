@@ -1,0 +1,52 @@
+setenv bootargs 'console=ttyO0,115200n8 earlyprintk root=/dev/mmcblk0p1 rw rootfstype=ext4 rootwait'
+setenv bootcmd 'run mmcboot'
+
+setenv mmcboot 'mmc dev ${mmcdev};if mmc rescan; then echo SD/MMC found on device ${mmcdev};if run loadbootenv;then echo Loaded environment from ${bootenv};run importbootenv;fi;if test -n $uenvcmd; then  echo Running uenvcmd ...;run uenvcmd;fi;if run loadimage; then run mmcloados;fi;fi;'
+-- 위 두줄은 한 묶음 --
+setenv mmcdev 0
+
+setenv loadbootenv 'load mmc ${mmcdev} ${loadaddr} ${bootdir}/${bootenv}'
+setenv bootdir '/boot'
+setenv loadaddr 0x82000000
+setenv bootenv 'uEnv.txt'
+
+setenv importbootenv 'echo Importing environment from mmc ...; env import -t -r $loadaddr $filesize'
+setenv filesize 98
+
+setenv uenvcmd 'run loadimage;run loadramdisk;run findfdt;run loadfdt;run mmcloados'        ---- mmc 안 uEnv.txt에서 정의
+
+setenv loadimage 'load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}'
+setenv bootfile zImage
+setenv bootdir '/boot'
+setenv bootpart '0:1'
+
+setenv loadramdisk 'load mmc ${mmcdev} ${rdaddr} ramdisk.gz'
+setenv rdaddr 0x88080000
+
+setenv findfdt 'if test $board_name = A335BONE; then setenv fdtfile am335x-bone.dtb;fi;if test $board_name = A335BNLT; then setenv fdtfile am335x-bone.dtb;fi;if test $board_name = A33515BB; then  setenv fdtfile am335x-evm.dtb;fi;if test $board_name = A335X_SK; then setenv fdtfile am335x-evmsk.dtb;fi;if test $fdtfile = undefined; then echo WARNING: Could not determine device tree to use;fi;'
+-- 위 두줄은 한 묶음 --
+setenv board_name A335BNLT
+
+setenv loadfdt 'load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}'
+setenv fdtaddr 0x88000000
+
+setenv mmcloados 'run mmcargs;if test ${boot_fdt} = yes || test ${boot_fdt} = try; then if run loadfdt; then bootz ${loadaddr} - ${fdtaddr}; else if test ${boot_fdt} = try; then bootz;else echo WARN: Cannot load the DT;fi;fi;else bootz;fi;'
+-- 위 두줄은 한 묶음 --
+setenv mmcargs 'setenv bootargs console=${console} ${optargs} root=${mmcroot} rootfstype=${mmcrootfstype}'
+setenv console 'ttyO0,115200n8'
+setenv optargs earlyprintk
+setenv mmcroot '/dev/mmcblk0p1 rw'
+setenv mmcrootfstype 'ext4 rootwait'
+
+setenv boot_fdt try
+
+ 
+------------------------------------------------------
+연습
+setenv board_name A335BONE
+
+---------
+원본
+setenv findfdt 'if test $board_name = A335BONE; then setenv fdtfile am335x-bone.dtb;fi;if test $board_name = A335BNLT; then setenv fdtfile am335x-boneblack.dtb;fi;if test $board_name = A33515BB; then  setenv fdtfile am335x-evm.dtb;fi;if test $board_name = A335X_SK; then setenv fdtfile am335x-evmsk.dtb;fi;if test $fdtfile = undefined; then echo WARNING: Could not determine device tree to use;fi;'
+setenv bootargs 'console=ttyO0,115200n8 quiet root=/dev/mmcblk0p1 rw rootfstype=ext4 rootwait'
+setenv optargs quiet

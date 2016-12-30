@@ -1,0 +1,1 @@
+setenv partitions ‘uuid_disk=${uuid_gpt_disk};name=rootfs,start=2MiB,size=-,uuid=${uuid_gpt_rootfs}'
